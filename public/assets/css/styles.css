@@ -1,0 +1,14 @@
+body{
+  background-color:#F6E3C3 ;
+}
+#signup-container{
+  background-color: #DECDB0 ;
+}
+.navbar{
+  min-width: 350px;
+  background-color: #EEA0A6;
+}
+.logo{
+  width:80px;
+  margin-right: 4%;
+}
