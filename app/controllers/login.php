@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   if ($row = where($arr, 'users')) {
   if(password_verify($_POST['password'],$row[0]['password'])){
     
-      authenticate($row);
+      authenticate($row[0]);
       redirect('home');
     } else {
       $errors['password'] = 'Wrong password!!';
