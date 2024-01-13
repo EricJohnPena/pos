@@ -35,9 +35,10 @@ function connect()
   return $con;
 };
 
-function redirect($page){
+function redirect($page)
+{
 
-  header("Location: index.php?pg=" .$page);
+  header("Location: index.php?pg=" . $page);
   die;
 };
 
@@ -81,59 +82,77 @@ function allowed_columns($data, $table)
 
 function insert($data, $table)
 {
-    $arr = allowed_columns($data, $table);
-    $keys = array_keys($arr);
+  $arr = allowed_columns($data, $table);
+  $keys = array_keys($arr);
 
-    $query = "INSERT INTO $table ";
-    $query .= "(".implode(",", $keys) .") values ";
-    $query .= "(".implode(",", array_map(function($key) { return ":$key"; }, $keys)) .")";
+  $query = "INSERT INTO $table ";
+  $query .= "(" . implode(",", $keys) . ") values ";
+  $query .= "(" . implode(",", array_map(function ($key) {
+    return ":$key";
+  }, $keys)) . ")";
 
-    try {
-        query($query, $arr);
-        
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
-    }
+  try {
+    query($query, $arr);
+  } catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+  }
 }
 
 
 function validate($data, $table)
 {
   $errors = [];
-  
+
   if ($table == 'users') {
     //check username
-    if(empty($data['username'])) {
+    if (empty($data['username'])) {
       $errors['username'] = 'Username is required.';
     }
 
-     //check username
-     if(empty($data['email'])) {
+    //check username
+    if (empty($data['email'])) {
       $errors['email'] = 'Email is required.';
-    }else if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-$errors['email'] = 'Invalid Email';
+    } else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+      $errors['email'] = 'Invalid Email';
     }
 
     //check password
-    if(empty($data['password'])) {
+    if (empty($data['password'])) {
       $errors['password'] = 'Password is required.';
-    }else if ($data['password'] !== $data['repassword']){
-      $errors['repassword'] = 'Passwords do not match. Please try again.' ;
-    }else if(strlen($data['password'])<8){
-      $errors['password']='Your password must be at least 8 characters long.';
+    } else if ($data['password'] !== $data['repassword']) {
+      $errors['repassword'] = 'Passwords do not match. Please try again.';
+    } else if (strlen($data['password']) < 8) {
+      $errors['password'] = 'Your password must be at least 8 characters long.';
     }
   }
- return $errors;
+
+  return $errors;
 };
 
-function setValue($key, $default =""){
-  if(!empty($_POST[$key])){
+function setValue($key, $default = "")
+{
+  if (!empty($_POST[$key])) {
     return $_POST[$key];
   }
-    return $default;
-  
+  return $default;
 };
 
-function authenticate($row){
+function authenticate($row)
+{
   $_SESSION['USER'] = $row;
 };
+
+function where($data, $table)
+{
+ 
+  $keys = array_keys($data);
+$query = "SELECT * FROM $table WHERE ";
+
+  foreach ($keys as $key){
+    $query .= "$key = :$key && ";
+  }
+  $query = trim($query,"&& ");
+  return query($query,$data);
+
+
+}
