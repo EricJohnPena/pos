@@ -1,4 +1,5 @@
 <?php
+session_start();
 require "../app/cores/init.php";
 $controller = $_GET['pg'] ?? "home";//if exist, send 1, else send 2
 $controller = strtolower($controller);

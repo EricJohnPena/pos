@@ -4,6 +4,11 @@ body{
 #signup-container{
   background-color: #DECDB0 ;
 }
+#login-container{
+  background-color: #EEA0A6;
+  border-radius: 5px;
+
+}
 .navbar{
   min-width: 350px;
   background-color: #EEA0A6;
@@ -11,4 +16,42 @@ body{
 .logo{
   width:80px;
   margin-right: 4%;
+  margin-left: 1%;
+}
+.logo-login{
+  width: 150px;
+}
+.text-login{
+  font-size: 30px; margin-bottom: 0px;
+}
+.item-container{
+  min-height: 600px;
+   margin-top: 48px;
+    margin-bottom: 48px;
+    margin-left: 38px;
+    background-color:#DECDB0 ;
+}
+.cart-container{
+  background-color:#DECDB0 ;
+  height: 600px;
+}
+.products{
+  height: 90%;
+  overflow-y:scroll; 
+}
+.product-card{
+ 
+  margin-left: 16px;
+ min-width: 100px;
+   width: 190px;
+height: 200px;
+
+}
+.product-name{
+  margin-bottom: 0px;
+  margin-top: 20px;
+}
+.product-table{
+  height: 400px;
+  overflow-y: scroll;
 }
