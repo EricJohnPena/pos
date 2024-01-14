@@ -6,7 +6,7 @@ class Model extends Database
   {
   if(!empty($this->allowed_columns)){
       foreach ($data as $key => $value) {
-        if (!in_array($key, $columns)) {
+        if (!in_array($key, $this->allowed_columns)) {
           unset($data[$key]);
         }
       } }
@@ -16,7 +16,7 @@ class Model extends Database
 
   public function insert($data)
   {
-    $arr = allowed_columns($data, $this->table);
+    $arr = $this->get_allowed_columns($data, $this->table);
     $keys = array_keys($arr);
   
     $query = "INSERT INTO $this->table ";

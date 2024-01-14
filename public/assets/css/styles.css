@@ -9,6 +9,9 @@ body{
   border-radius: 5px;
 
 }
+body a{
+  text-decoration: none;
+}
 .navbar{
   min-width: 350px;
   background-color: #EEA0A6;
@@ -55,3 +58,4 @@ height: 200px;
   height: 400px;
   overflow-y: scroll;
 }
+
