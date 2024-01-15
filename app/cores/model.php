@@ -33,6 +33,39 @@ class Model extends Database
     }
   }
 
+  public function update($id, $data)
+  {
+    $arr = $this->get_allowed_columns($data, $this->table);
+    $keys = array_keys($arr);
+  
+    $query = "update $this->table set ";
+    foreach($keys as $column) {
+      $query .= $column ." = :" .$column.",";
+    }
+    $query = trim($query, ", ");
+    $query .= " where id = :id";
+    $arr['id'] = $id;
+
+
+    $db = new Database;
+    $db->query($query, $arr);
+   
+  }
+
+  public function delete($id)
+  {
+   
+  
+    $query = "delete from $this->table where id = :id limit 1 ";
+   
+    $arr['id'] = $id;
+
+
+    $db = new Database;
+    $db->query($query, $arr);
+   
+  }
+
   public function where($data)
 {
 
@@ -47,4 +80,23 @@ class Model extends Database
   
   return $db->query($query, $data);
 }
+
+public function where_one($data)
+{
+
+  $keys = array_keys($data);
+  $query = "SELECT * FROM $this->table WHERE ";
+
+  foreach ($keys as $key) {
+    $query .= "$key = :$key && ";
+  }
+  $query = trim($query, "&& ");
+  $db = new Database;
+
+  if($res = $db->query($query,$data)){
+    return $res['0'];
+  }
+    return false;
+}
+
 }

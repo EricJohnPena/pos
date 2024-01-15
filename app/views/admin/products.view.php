@@ -18,17 +18,21 @@
 <tr>
 <td><?=$product['barcode']?></td>
 <td>
-  <a href="index.php?pg=single-product&id=<?=$product['id']?>">
+  <a href="index.php?pg=product-single&id=<?=$product['id']?>">
   <?=$product['description']?>
 </a>
 </td>
 <td><?=$product['quantity']?></td>
 <td>Php. <?=$product['amount']?></td>
   <td><img style="height: 80px;" src="<?=$product['image']?>" alt="product image"></td>
-<td><?=$product['date']?></td>
+<td><?=date("jS M, Y",strtotime($product['date']))?></td>
   <td>
+  <a href="index.php?pg=product-edit&id=<?=$product['id']?>">
     <button class="btn btn-success btn-sm">Edit</button>
+  </a>
+    <a href="index.php?pg=product-delete&id=<?=$product['id']?>">
     <button class="btn btn-danger btn-sm">Delete</button>
+    </a>
   </td>
 </tr>
 <?php endforeach; ?>

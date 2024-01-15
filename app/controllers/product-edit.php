@@ -1,12 +1,12 @@
 <?php
 
 $errors = [];
-if ($_SERVER['REQUEST_METHOD'] == "POST"){
+$id = $_GET['id'] ?? null;
 $product = new Products();
 
+$row = $product->where_one(['id'=>$id]);
+if ($_SERVER['REQUEST_METHOD'] == "POST" && $row){
 
-  $_POST['date'] = date("Y-m-d H:i:s");
-  $_POST['user_id'] = auth("id");
   $_POST['barcode'] = empty($_POST['barcode']) ? $product->generate_barcode():$_POST['barcode'];
 
   if(!empty($_FILES['image']['name'])){
@@ -14,24 +14,28 @@ $product = new Products();
    
   }
 
-$errors = $product->validate($_POST);
+$errors = $product->validate($_POST,$row['id']);
 if(empty($errors)){
 
 $folder = "uploads/";
 if(!file_exists($folder)){
   mkdir($folder,0777,true);
 }
+
+if(!empty($_POST['image'])){
 $ext = strtolower(pathinfo($_POST['image']['name'],PATHINFO_EXTENSION ));
 $destination = $folder . $product->generate_filename($ext);
 move_uploaded_file( $_POST['image']['tmp_name'], $destination); 
 $_POST['image'] = $destination;
-  $product->insert($_POST);
+
+if(file_exists($row['image'])){
+  unlink($row['image']);
+}
+}
+  $product->update($row['id'],$_POST);
   redirect('admin&tab=products');
-}else{
-
 }
-  
   
 }
 
-require viewsPath('products/product-new');
+require viewsPath('products/product-edit');

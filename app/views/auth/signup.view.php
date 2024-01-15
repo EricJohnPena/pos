@@ -31,9 +31,9 @@
       <?php endif; ?>
     </div>
     <a href="index.php?pg=home">
-      <button type="button" class="btn btn-secondary">Cancel</button>
-    </a>
-    <button type="submit" class="btn btn-success float-end">Add</button>
+      <button type="button" class="btn col-12 col-md-3 btn-secondary mb-2">Cancel</button>
+      </a>
+    <button type="submit" class="btn col-12 col-md-3 btn-success float-end">Add</button>
 
   </form>
 </div>

@@ -15,7 +15,7 @@ class Products extends Model{
 
   
 
-public function validate($data)
+public function validate($data,$id =null)
 {
   $errors = [];
 
@@ -29,8 +29,8 @@ public function validate($data)
     //check quantity
 $size = 4;
 $max_size =$size * (1024 * 1024);
-
-    if (empty($data['quantity'])) {
+if(!$id || ($id && !empty($data['image']))){
+  if (empty($data['quantity'])) {
       $errors['quantity'] = 'Product quantity is required.';
     }
 
@@ -49,11 +49,8 @@ $max_size =$size * (1024 * 1024);
       {
         $errors['image'] = 'Image must be under 4 mb in size .';
       }
-  
-
-    
-  
-
+}
+   
   return $errors;
 }
 
