@@ -4,27 +4,27 @@ class Model extends Database
 {
   protected function get_allowed_columns($data)
   {
-  if(!empty($this->allowed_columns)){
+    if (!empty($this->allowed_columns)) {
       foreach ($data as $key => $value) {
         if (!in_array($key, $this->allowed_columns)) {
           unset($data[$key]);
         }
-      } }
-      return $data;
- 
+      }
+    }
+    return $data;
   }
 
   public function insert($data)
   {
     $arr = $this->get_allowed_columns($data, $this->table);
     $keys = array_keys($arr);
-  
+
     $query = "INSERT INTO $this->table ";
     $query .= "(" . implode(",", $keys) . ") values ";
     $query .= "(" . implode(",", array_map(function ($key) {
       return ":$key";
     }, $keys)) . ")";
-  
+
     try {
       $db = new Database;
       $db->query($query, $arr);
@@ -37,10 +37,10 @@ class Model extends Database
   {
     $arr = $this->get_allowed_columns($data, $this->table);
     $keys = array_keys($arr);
-  
+
     $query = "update $this->table set ";
-    foreach($keys as $column) {
-      $query .= $column ." = :" .$column.",";
+    foreach ($keys as $column) {
+      $query .= $column . " = :" . $column . ",";
     }
     $query = trim($query, ", ");
     $query .= " where id = :id";
@@ -49,54 +49,66 @@ class Model extends Database
 
     $db = new Database;
     $db->query($query, $arr);
-   
   }
 
   public function delete($id)
   {
-   
-  
+
+
     $query = "delete from $this->table where id = :id limit 1 ";
-   
+
     $arr['id'] = $id;
 
 
     $db = new Database;
     $db->query($query, $arr);
-   
   }
 
   public function where($data)
-{
+  {
 
-  $keys = array_keys($data);
-  $query = "SELECT * FROM $this->table WHERE ";
+    $keys = array_keys($data);
+    $query = "SELECT * FROM $this->table WHERE ";
 
-  foreach ($keys as $key) {
-    $query .= "$key = :$key && ";
+    foreach ($keys as $key) {
+      $query .= "$key = :$key && ";
+    
+    }
+    $query = trim($query, "&& ");
+    $db = new Database;
+
+    return $db->query($query, $data);
   }
-  $query = trim($query, "&& ");
-  $db = new Database;
+
   
-  return $db->query($query, $data);
-}
-
-public function where_one($data)
-{
-
-  $keys = array_keys($data);
-  $query = "SELECT * FROM $this->table WHERE ";
-
-  foreach ($keys as $key) {
-    $query .= "$key = :$key && ";
+  public function getAll($limit = 10, $offset = 0, $order = "desc", $order_column = "id")
+  {
+    
+    
+    $query = "SELECT * FROM $this->table order by $order_column $order limit $limit offset $offset";
+    
+    
+    $db = new Database;
+    
+    return $db->query($query);
   }
-  $query = trim($query, "&& ");
-  $db = new Database;
-
-  if($res = $db->query($query,$data)){
-    return $res['0'];
-  }
+  
+  
+  public function where_one($data)
+  {
+  
+    $keys = array_keys($data);
+    $query = "SELECT * FROM $this->table WHERE ";
+  
+    foreach ($keys as $key) {
+      $query .= "$key = :$key && ";
+    }
+    $query = trim($query, "&& ");
+    $db = new Database;
+  
+    if ($res = $db->query($query, $data)) {
+      return $res['0'];
+    }
     return false;
-}
-
+  }
 }
