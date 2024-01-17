@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
   $arr['username'] = $_POST['username'];
 $user = new User();
-  if ($row = $user->where($arr, 'users')) {
+  if ($row = $user->where($arr)) {
   if(password_verify($_POST['password'],$row[0]['password'])){
     
       authenticate($row[0]);

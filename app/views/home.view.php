@@ -16,7 +16,7 @@
   <div class="col col-5 p-4 pt-2 m-5 cart-container">
     <div style="border-bottom: 1px solid black">
       <center>
-        <h3>Cart <div class="badge bg-primary rounded circle item-count">0</div>
+        <h3>Cart <div class="badge bg-primary rounded circle item-count"></div>
         </h3>
       </center>
     </div>
@@ -52,7 +52,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <input class="form-control amount-paid" type="number" placeholder="Enter amount paid" aria-label="default input example">
+      <input class="form-control amount-paid" type="number" placeholder="Enter amount paid" aria-label="default input example" required>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -100,53 +100,175 @@ nextButton.addEventListener("click", function() {
   // Get the value of the amount paid and the GTOTAL
   var paid = parseFloat(amountPaid.value);
   var total = GTOTAL;
+  if(!paid)
+		{
+			
+			return '<p>asd</p>';
+		}
+  if(paid < total){
+
+return;
+}
+
   // Calculate the change
   var change = paid - total;
 
   // Display the change in the second modal
   changeAmount.textContent = change.toFixed(2);
-  ITEMS = [];
-  refreshItems();
-});
 
-  var PRODUCTS = [];
-  var ITEMS = [];
-  var GTOTAL = 0;
+  
+  	//remove unwanted information
+		var ITEMS_NEW = [];
+		for (var i = 0; i < ITEMS.length; i++) {
+			
+			var tmp = {};
+			tmp.id = ITEMS[i]['id'];
+			tmp.quantity = ITEMS[i]['quantity'];
+
+			ITEMS_NEW.push(tmp);
+		}
+    console.log(ITEMS_NEW);
+
+		//send cart data through ajax
+		sendData({
+
+			data_type:"checkout",
+			text:ITEMS_NEW
+		});
+console.log("hello");
+		//open receipt page
+		print_receipt({
+			company:'My POS',
+			amount:amountPaid,
+			change:CHANGE,
+			gtotal:GTOTAL,
+			data:ITEMS
+		});
+
+		//clear items
+		ITEMS = [];
+		refreshItems();
+
+		
+});//reload products
+		sendData({
+
+			data_type:"search",
+			text:""
+		});
+function print_receipt(obj)
+	{
+		var vars = JSON.stringify(obj);
+
+		RECEIPT_WINDOW = window.open('index.php?pg=print&vars='+vars,'printpage',"width=500px;");
+
+		setTimeout(close_receipt_window,2000);
+		
+	}
+ 
+ 	function close_receipt_window()
+ 	{
+ 		RECEIPT_WINDOW.close();
+ 	}
+
+	sendData({
+
+		data_type:"search",
+		text:""
+	});
+
+
+var PRODUCTS 	= [];
+	var ITEMS 		= [];
+	var BARCODE 	= false;
+	var GTOTAL  	= 0;
+	var CHANGE  	= 0;
+	var RECEIPT_WINDOW = null;
+
+  var main_input = document.querySelector(".js-search");
+
+	function search_item(e){
+
+		var text = e.target.value.trim();
+	 
+		var data = {};
+		data.data_type = "search";
+		data.text = text;
+
+		sendData(data);
+	}
 
   function sendData(data) {
     var ajax = new XMLHttpRequest();
-    ajax.addEventListener('readystatechange', function(e) {
-      if (ajax.readyState == 4) {
-        
-        if (ajax.status == 200) {
-          handleResult(ajax.responseText);
-        } else {
-          console.log("Error");
-        }
-      }
-    });
 
-    ajax.open('post', 'index.php?pg=ajax', true);
-    ajax.send(JSON.stringify(data));
+		ajax.addEventListener('readystatechange',function(e){
+
+			if(ajax.readyState == 4){
+
+				
+				if(ajax.status == 200)
+				{
+					if(ajax.responseText.trim() != ""){
+						handleResult(ajax.responseText);
+					}else{
+						if(BARCODE){
+							alert("that item was not found");
+						}
+					}
+				}else{
+
+					console.log("An error occured. Err Code:"+ajax.status+" Err message:"+ajax.statusText);
+					console.log(ajax);
+				}
+
+				//clear main input if enter was pressed
+				if(BARCODE){
+					main_input.value = "";
+					main_input.focus();
+				}
+
+				BARCODE = false;
+
+			}
+			
+		});
+
+		ajax.open('post','index.php?pg=ajax',true);
+		ajax.send(JSON.stringify(data));
   }
 
 
   function handleResult(result) {
 
     var obj = JSON.parse(result);
+		if(typeof obj != "undefined"){
 
-    if (typeof obj != "undefined") {
+			//valid json
+			if(obj.data_type == "search")
+			{
 
+				var mydiv = document.querySelector(".products");
 
-      var mydiv = document.querySelector(".products");
-      mydiv.innerHTML = "";
-      PRODUCTS = obj;
-      for (var i = 0; i < obj.length; i++) {
+				mydiv.innerHTML = "";
+				PRODUCTS = [];
 
-        mydiv.innerHTML += productHTML(obj[i], i);
-      }
-    }
+				var mydiv = document.querySelector(".products");
+				if(obj.data != "")
+				{
+					
+					PRODUCTS = obj.data;
+					for (var i = 0; i < obj.data.length; i++) {
+						
+						mydiv.innerHTML += productHTML(obj.data[i],i);
+					}
 
+					if(BARCODE && PRODUCTS.length == 1){
+						addItemIndex(0);
+					}
+				}
+			}
+			
+		}
   }
 
   function productHTML(data, index) {
@@ -228,7 +350,7 @@ nextButton.addEventListener("click", function() {
       grand_total += ITEMS[i].quantity * ITEMS[i].amount;
     }
     var gtotal_div = document.querySelector(".gtotal");
-    gtotal_div.innerHTML = "Total: Php " + grand_total;
+    gtotal_div.innerHTML = "Total: Php " + grand_total.toFixed(2);
     GTOTAL = grand_total;
 
   }
@@ -259,6 +381,20 @@ nextButton.addEventListener("click", function() {
     }
     refreshItems();
   }
+
+  function check_for_enter_key(e)
+	{
+
+		if(e.keyCode == 13)
+		{
+			BARCODE = true;
+			search_item(e);
+		}
+	}
+
+
+
+
   sendData();
 </script>
 

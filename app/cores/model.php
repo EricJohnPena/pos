@@ -64,21 +64,26 @@ class Model extends Database
     $db->query($query, $arr);
   }
 
-  public function where($data)
-  {
+  public function where($data,$limit = 10,$offset = 0,$order = "desc",$order_column = "id")
+	{
 
-    $keys = array_keys($data);
-    $query = "SELECT * FROM $this->table WHERE ";
+		$keys = array_keys($data);
+		
+		$query = "select * from $this->table where ";
 
-    foreach ($keys as $key) {
-      $query .= "$key = :$key && ";
-    
-    }
-    $query = trim($query, "&& ");
-    $db = new Database;
+		foreach ($keys as $key) {
+			// code...
+			$query .= "$key = :$key && ";
+		}
 
-    return $db->query($query, $data);
-  }
+		$query = trim($query,"&& ");
+		$query .= " order by $order_column $order limit $limit offset $offset";
+
+		$db = new Database;
+		return $db->query($query,$data);	
+
+	}
+
 
   
   public function getAll($limit = 10, $offset = 0, $order = "desc", $order_column = "id")
