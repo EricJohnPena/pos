@@ -14,14 +14,7 @@
         <small class="text-danger"> <?= $errors['description'] ?> </small>
       <?php endif; ?>
   </div>
-  <div class="mb-3">
-    <label for="formGroupExampleInput2" class="form-label">Barcode (Optional)</label>
-    <input disabled value="<?=setValue('barcode', $row['barcode']) ?>" type="text" class="form-control" id="barcode" name="barcode" placeholder="Product barcode">
-    <?php if (!empty($errors['barcode'])) : ?>
-        <small class="text-danger"> <?= $errors['barcode'] ?> </small>
-      <?php endif; ?>
-  </div>
- 
+
 
  Image preview:<br>
 <center>

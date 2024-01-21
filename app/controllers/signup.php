@@ -11,12 +11,14 @@ $errors = $user->validate($_POST);
 if(empty($errors)){
   $_POST['password'] = password_hash($_POST['password'],  PASSWORD_BCRYPT);
   $user->insert($_POST);
-  redirect('login');
+  redirect('admin&tab=users');
 }else{
 
 }
-  
-  
 }
-
-require viewsPath('auth/signup');
+if(Auth::access('admin')){
+ require viewsPath('auth/signup');
+}else{
+  Auth::setMessage("You don't have access to this page.");
+  require viewsPath('auth/denied');
+}

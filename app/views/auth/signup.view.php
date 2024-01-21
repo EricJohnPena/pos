@@ -1,7 +1,7 @@
 <?php require viewsPath('partials/header');  ?>
 <div class="container-fluid border col-lg-5 col-md-6 p-5 mt-5" id="signup-container">
   <form method="post">
-    <h3>Add User</h3>
+    <h3>Create User</h3>
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>
       <input value="<?= setValue('username'); ?>" name="username" type="text" class="form-control <?= !empty($errors['username']) ? 'border-danger' : '' ?> " id="username" placeholder="Enter Username">
@@ -30,7 +30,7 @@
         <small class="text-danger"> <?= $errors['repassword'] ?> </small>
       <?php endif; ?>
     </div>
-    <a href="index.php?pg=home">
+    <a href="index.php?pg=admin&tab=users">
       <button type="button" class="btn col-12 col-md-3 btn-secondary mb-2">Cancel</button>
       </a>
     <button type="submit" class="btn col-12 col-md-3 btn-success float-end">Add</button>

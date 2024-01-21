@@ -1,4 +1,10 @@
 <?php
 defined("ABSPATH") ? "" :die();
 
-require viewsPath('home');
+if(Auth::access('cashier')){
+  require viewsPath('home');
+}else{
+ 
+  redirect('login');
+}
+

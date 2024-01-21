@@ -10,23 +10,33 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="index.php?pg=home">Point of Sale</a>
         </li>
+        <?php if(Auth::access('admin')): ?>
         <li class="nav-item">
           <a class="nav-link" href="index.php?pg=admin">Admin</a>
         </li>
         <li class="nav-item">
         <a class="nav-link" href="index.php?pg=signup">Add User</a>
         </li>
+        <?php endif;?>
+        <?php if(!Auth::loggedIn()): ?>
+        <li class="nav-item">
+          <a class="nav-link" href="index.php?pg=login">Login</a>
+        </li>
+        <?php endif;?>
+        <?php if(Auth::loggedIn()): ?>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Hi, <?=auth('username');?>
+            Hi, <?=auth('username');?> (<?=Auth::get('role')?>)
           </a>
           <ul class="dropdown-menu">
+            
             <li><a class="dropdown-item" href="index.php?pg=profile">Profile</a></li>
-            <li><a class="dropdown-item" href="index.php?pg=profile-settings">Profile Settings</a></li>
+            <li><a class="dropdown-item" href="index.php?pg=user-edit&id=<?=Auth::get('id')?>">Profile Settings</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="index.php?pg=logout">Logout</a></li>
           </ul>
         </li>
+        <?php endif; ?>
        
       </ul>
       

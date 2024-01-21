@@ -1,7 +1,7 @@
 <?php require viewsPath('partials/header');  ?>
 
-<div class="d-flex">
-  <div class=" col col-6 pt-2  item-container">
+<div class="d-flex row">
+  <div class=" col col-5 pt-2  item-container">
     <div style="border-bottom: 1px solid black">
       <center>
         <h3>Items </h3>
@@ -13,7 +13,8 @@
     </div>
 
   </div>
-  <div class="col col-5 p-4 pt-2 m-5 cart-container">
+
+  <div class="col col-4 p-4 pt-2 m-5 cart-container">
     <div style="border-bottom: 1px solid black">
       <center>
         <h3>Cart <div class="badge bg-primary rounded circle item-count"></div>
@@ -111,10 +112,10 @@ return;
 }
 
   // Calculate the change
-  var change = paid - total;
+  var CHANGE = paid - total;
 
   // Display the change in the second modal
-  changeAmount.textContent = change.toFixed(2);
+  changeAmount.textContent = CHANGE.toFixed(2);
 
   
   	//remove unwanted information
@@ -127,7 +128,7 @@ return;
 
 			ITEMS_NEW.push(tmp);
 		}
-    console.log(ITEMS_NEW);
+   
 
 		//send cart data through ajax
 		sendData({
@@ -135,11 +136,11 @@ return;
 			data_type:"checkout",
 			text:ITEMS_NEW
 		});
-console.log("hello");
+
 		//open receipt page
 		print_receipt({
-			company:'My POS',
-			amount:amountPaid,
+			company:'Sweet Swirl Mini Donut',
+			amount:paid,
 			change:CHANGE,
 			gtotal:GTOTAL,
 			data:ITEMS
@@ -160,9 +161,9 @@ function print_receipt(obj)
 	{
 		var vars = JSON.stringify(obj);
 
-		RECEIPT_WINDOW = window.open('index.php?pg=print&vars='+vars,'printpage',"width=500px;");
+		RECEIPT_WINDOW = window.open('index.php?pg=print&vars='+vars,'printpage',"width=400px;");
 
-		setTimeout(close_receipt_window,2000);
+	//	setTimeout(close_receipt_window,5000);
 		
 	}
  
@@ -184,6 +185,7 @@ var PRODUCTS 	= [];
 	var GTOTAL  	= 0;
 	var CHANGE  	= 0;
 	var RECEIPT_WINDOW = null;
+  var AMOUNT = 0;
 
   var main_input = document.querySelector(".js-search");
 

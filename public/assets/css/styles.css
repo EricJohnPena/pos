@@ -28,7 +28,7 @@ body a{
   font-size: 30px; margin-bottom: 0px;
 }
 .item-container{
-  min-height: 600px;
+  max-height: 600px;
    margin-top: 48px;
     margin-bottom: 48px;
     margin-left: 38px;
@@ -58,4 +58,3 @@ height: 200px;
   height: 400px;
   overflow-y: scroll;
 }
-
