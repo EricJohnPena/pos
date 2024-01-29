@@ -1,7 +1,7 @@
 <?php require viewsPath('partials/header');  ?>
 
 <div class="d-flex row">
-  <div class=" col col-5 pt-2  item-container">
+  <div class=" col col-xs-6 pt-2  item-container">
     <div style="border-bottom: 1px solid black">
       <center>
         <h3>Items </h3>
@@ -14,7 +14,7 @@
 
   </div>
 
-  <div class="col col-4 p-4 pt-2 m-5 cart-container">
+  <div class="col col-xs-3 p-4 pt-2 m-5 cart-container">
     <div style="border-bottom: 1px solid black">
       <center>
         <h3>Cart <div class="badge bg-primary rounded circle item-count"></div>
@@ -103,11 +103,11 @@ nextButton.addEventListener("click", function() {
   var total = GTOTAL;
   if(!paid)
 		{
-			
-			return '<p>asd</p>';
+      changeAmount.textContent = "Enter a valid amount";
+			return;
 		}
   if(paid < total){
-
+    changeAmount.textContent = "Amount should be higher than total costs";
 return;
 }
 
@@ -299,7 +299,7 @@ var PRODUCTS 	= [];
  ${data.description}
   <div class="input-group mb-3 " >
   <span index = "${index}" onclick="changeQty('down', event)" class="input-group-text" style="cursor: pointer;"><i class="fa fa-minus"></i></span>
-  <input index = "${index}" onblur="changeQty('input', event)" type="text" class="" value="${data.quantity}" placeholder="1" style="width: 50px;" >
+  <input index = "${index}" onblur="changeQty('input', event)" type="text" class="" value="${data.quantity}" placeholder="1" style="width: 40px;" >
   <span index = "${index}" onclick="changeQty('up', event)" class="input-group-text" style="cursor: pointer;"><i class="fa fa-plus"></i></span>
 </div>
  </p>

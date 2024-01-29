@@ -1,7 +1,7 @@
 <div class="table-responsive container-fluid product-table">
   <table class="table table-striped table-hover ">
     <tr>
-      <th>Barcode</th>
+     
       <th>Product</th>
       <th>Qty</th>
       <th>Price</th>
@@ -16,11 +16,11 @@
     <?php if (!empty($products)) :
       foreach ($products as $product) : ?>
         <tr>
-          <td><?= $product['barcode'] ?></td>
+        
           <td>
-            <a href="index.php?pg=product-single&id=<?= $product['id'] ?>">
+            <!-- <a href="index.php?pg=product-single&id=<?= $product['id'] ?>"> -->
               <?= $product['description'] ?>
-            </a>
+            <!-- </a> -->
           </td>
           <td><?= $product['quantity'] ?></td>
           <td>Php. <?= $product['amount'] ?></td>
